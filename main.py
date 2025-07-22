@@ -3,7 +3,6 @@ import discord
 from discord.ext import commands
 import asyncio
 import datetime
-from keep_alive import keep_alive
 
 TOKEN = "MTM1NjMxNjQ1MDYxNjUwODY1Nw.GPr3a6.-k0VYT4v1qdPA-9KKosMW7-4DodzJQBPKl2Cxs"
 
@@ -240,5 +239,4 @@ class RoleDropdown(discord.ui.Select):
             f" \nC {RECEIVER_ID} {price}"
         )
 
-keep_alive()
 bot.run(TOKEN)
