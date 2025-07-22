@@ -1,4 +1,2 @@
-discord.py
-PyNaCl
-asyncio
-datetime
+discord.py>=2.5.2
+PyNaCl>=1.5.0
