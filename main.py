@@ -1,10 +1,10 @@
-
 import discord
 from discord.ext import commands
 import asyncio
 import datetime
+import os
 
-TOKEN = "MTM1NjMxNjQ1MDYxNjUwODY1Nw.GPr3a6.-k0VYT4v1qdPA-9KKosMW7-4DodzJQBPKl2Cxs"
+TOKEN = os.getenv('DISCORD_TOKEN') or "MTM1NjMxNjQ1MDYxNjUwODY1Nw.GLt7xr.f66_2xtI9jSBfNh_2Fy7r-ZCkKBdxUwuBEZBTg"
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -59,7 +59,7 @@ async def on_command_error(ctx, error):
 async def on_message(message):
     if message.author == bot.user:
         return
-    
+
     # Check for @everyone mention
     if "@everyone" in message.content or "@here" in message.content:
         try:
@@ -72,11 +72,11 @@ async def on_message(message):
                 dm_message += f"💬 **القناة:** {message.channel.mention}\n"
                 dm_message += f"⏰ **الوقت:** {current_time}\n"
                 dm_message += f"📝 **الرسالة:** {message.content}"
-                
+
                 await owner.send(dm_message)
         except Exception as e:
             print(f"Error sending DM: {e}")
-    
+
     await bot.process_commands(message)
 
 # بنت command - gives role to user
@@ -85,28 +85,28 @@ async def bint_command(ctx, member: discord.Member = None):
     if ctx.author.id not in AUTHORIZED_USERS:
         await ctx.send("❌ هذا الأمر متاح للمالك والمخولين فقط")
         return
-    
+
     if member is None:
         await ctx.send("❌ يرجى منشن المستخدم المطلوب\nمثال: `!بنت @المستخدم`")
         return
-    
+
     try:
         # Get the role by ID
         role = ctx.guild.get_role(1355196241792729138)
-        
+
         if role is None:
             await ctx.send("❌ لم يتم العثور على الرتبة")
             return
-        
+
         # Check if user already has the role
         if role in member.roles:
             await ctx.send(f"❌ {member.mention} لديه الرتبة بالفعل")
             return
-        
+
         # Add the role to the user
         await member.add_roles(role)
         await ctx.send(f"✅ تم إعطاء رتبة {role.mention} إلى {member.mention}")
-        
+
     except discord.Forbidden:
         await ctx.send("❌ ليس لدي صلاحية لإعطاء هذه الرتبة")
     except Exception as e:
@@ -118,24 +118,24 @@ async def repeat_message(ctx, count: int = None, *, message = None):
     if ctx.author.id != OWNER_ID:
         await ctx.send("❌ هذا الأمر متاح للمالك فقط")
         return
-    
+
     if count is None or message is None:
         await ctx.send("❌ يرجى كتابة الأمر بالشكل الصحيح\nمثال: `!ترار 5 مرحبا بكم`")
         return
-    
+
     if count > 20:
         await ctx.send("❌ لا يمكن تكرار الرسالة أكثر من 20 مرة")
         return
-    
+
     if count < 1:
         await ctx.send("❌ يجب أن يكون العدد أكبر من 0")
         return
-    
+
     try:
         await ctx.message.delete()
     except:
         pass
-    
+
     for i in range(count):
         await ctx.send(message)
         await asyncio.sleep(0.5)  # Small delay to avoid rate limiting
@@ -146,7 +146,7 @@ async def join_voice(ctx):
     if ctx.author.id != OWNER_ID:
         await ctx.send("❌ هذا الأمر متاح للمالك فقط")
         return
-    
+
     if ctx.author.voice:
         channel = ctx.author.voice.channel
         try:
@@ -178,7 +178,7 @@ async def leave_voice(ctx):
     if ctx.author.id != OWNER_ID:
         await ctx.send("❌ هذا الأمر متاح للمالك فقط")
         return
-    
+
     if ctx.voice_client:
         await ctx.voice_client.disconnect()
         await ctx.send("🔇 تم الخروج من المكالمة")
